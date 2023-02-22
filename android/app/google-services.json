@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "930383544572",
+    "project_id": "linea-de-profundizacion-4e41a",
+    "storage_bucket": "linea-de-profundizacion-4e41a.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:930383544572:android:8b7443d3828d02c9789779",
+        "android_client_info": {
+          "package_name": "com.example.lprofundizacionll"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "930383544572-sds9kuojhs8asf00t16giclqoft6hev0.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBcL_nkyb04m_veFLkkvx5eWZ2F4_NIa4M"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "930383544572-sds9kuojhs8asf00t16giclqoft6hev0.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
