@@ -3,7 +3,17 @@ import 'package:flutter/services.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_core/firebase_core.dart';
 
+import '../DTO/User.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_core/firebase_core.dart';
+
+import '../DTO/User.dart';
+
 class Registro extends StatefulWidget{
+  final User cadena;
+  Registro(this.cadena);
   @override
   RegistroApp createState() => RegistroApp();
 }
@@ -25,20 +35,42 @@ class RegistroApp extends State<Registro>{
         "CorreoUsuario": correo.text,
         "Telefonousuario": telefono.text,
         "ContraseñaUsuario": contrasena.text,
+        "Rol": "Invitado",
+        "Estado" : true
       });
       print("Envio correcto");
+      mensaje("Emergente","Registro correcto")
     }catch(e){
       print("Error en insert " + e.toString());
     }
   }
+  void mensaje(String titulo, String contenido) {
+    showDialog(
+        context: context,
+        builder: (buildcontext) {
+          return AlertDialog(
+            title: Text(titulo),
+            content: Text(contenido),
+            actions: <Widget>[
+              FloatingActionButton(
+                onPressed: () {
+
+                },
+                child: Text('Aceptar'),
+              )
+            ],
+          );
+        });
+  }
+
 
   @override
   Widget build( BuildContext context){
 
     return Scaffold(
       appBar: AppBar(
-        title: Text("REGISTRO DE USUARIOS"),
-        backgroundColor: Colors.green,
+        title: Text("REGISTRO DE USUARIOS --> " + widget.cadena.nombre),
+        backgroundColor: Colors.teal,
       ),
       body: SingleChildScrollView(
         child: Column(
@@ -53,7 +85,7 @@ class RegistroApp extends State<Registro>{
                     labelText: "Usuario"
                 ),
                 style: TextStyle(
-                    color: Color(0xff610316)
+                    color: Color(0xff38ac23)
                 ),
               ),
             ),
@@ -67,7 +99,7 @@ class RegistroApp extends State<Registro>{
                     labelText: "Identificación"
                 ),
                 style: TextStyle(
-                    color: Color(0xff610316)
+                    color: Color(0xff38ac23)
                 ),
               ),
             ),
@@ -81,7 +113,7 @@ class RegistroApp extends State<Registro>{
                     labelText: "Correo"
                 ),
                 style: TextStyle(
-                    color: Color(0xff610316)
+                    color: Color(0xff38ac23)
                 ),
               ),
             ),
@@ -95,7 +127,7 @@ class RegistroApp extends State<Registro>{
                     labelText: "Telefono"
                 ),
                 style: TextStyle(
-                    color: Color(0xff610316)
+                    color: Color(0xff38ac23)
                 ),
               ),
             ),
@@ -109,7 +141,7 @@ class RegistroApp extends State<Registro>{
                     labelText: "Contraseña"
                 ),
                 style: TextStyle(
-                    color: Color(0xff610316)
+                    color: Color(0xff38ac23)
                 ),
               ),
             ),

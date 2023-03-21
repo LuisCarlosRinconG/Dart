@@ -1,6 +1,7 @@
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'DTO/User.dart';
 import 'View/Registro.dart';
 import 'firebase_options.dart';
 
@@ -26,6 +27,7 @@ class Home extends StatefulWidget {
 class HomeStart extends State<Home>{
   TextEditingController nombre = TextEditingController();
   TextEditingController contrasena = TextEditingController();
+  User objUser=User();
 
   validarDatos() async{
     try{
@@ -40,6 +42,11 @@ class HomeStart extends State<Home>{
             if(cursor.get("ContraseñaUsuario") == contrasena.text){
               print("ACCESO PERMITIDO!");
               print("BIENVENIDO " + nombre.text);
+              mensaje("Emergente","Acceso permitido");
+              objUser.nombre=cursor.get("NombreUsuario");
+              objUser.id=cursor.get("IdentidadUsuario");
+              objUser.rol=("Administrador");
+              //objUser.estado=
             }else{
               print("La contraseña es incorrecta");
             }
@@ -86,6 +93,7 @@ class HomeStart extends State<Home>{
               Padding(padding: EdgeInsets.only(top: 30, left: 500, right: 500),
                 child: TextField(
                   controller: contrasena,
+                  obscureText:true,
                   decoration: InputDecoration(
                       border: OutlineInputBorder(
                           borderRadius: BorderRadius.circular(10)
@@ -107,7 +115,7 @@ class HomeStart extends State<Home>{
               Padding(padding: EdgeInsets.only(top: 20, left: 30,right: 30),
                 child: TextButton(
                   onPressed: (){
-                    Navigator.push(context, MaterialPageRoute(builder: (_) => Registro()));
+                    Navigator.push(context, MaterialPageRoute(builder: (_) => Registro(objUser)));
                   },
                   child: Text('Registrar'),
                 ),
@@ -117,5 +125,23 @@ class HomeStart extends State<Home>{
         ),
       ),
     );
+  }
+  void mensaje(String titulo, String contenido) {
+    showDialog(
+        context: context,
+        builder: (buildcontext) {
+          return AlertDialog(
+            title: Text(titulo),
+            content: Text(contenido),
+            actions: <Widget>[
+              FloatingActionButton(
+                onPressed: () {
+
+                },
+                child: Text('Aceptar'),
+              )
+            ],
+          );
+        });
   }
 }
