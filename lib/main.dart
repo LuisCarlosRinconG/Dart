@@ -1,9 +1,12 @@
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:flutter/services.dart';
+import 'package:local_auth/auth_strings.dart';
 import 'DTO/User.dart';
 import 'View/Registro.dart';
 import 'firebase_options.dart';
+import 'package:local_auth/local_auth.dart';
 
 void main() async{
   WidgetsFlutterBinding.ensureInitialized();
@@ -27,6 +30,7 @@ class Home extends StatefulWidget {
 class HomeStart extends State<Home>{
   TextEditingController nombre = TextEditingController();
   TextEditingController contrasena = TextEditingController();
+  final LocalAuthentication auth=LocalAuthentication();
   User objUser=User();
   int IyA=0;
   String n="";
@@ -46,7 +50,8 @@ class HomeStart extends State<Home>{
               print("BIENVENIDO " + nombre.text);
               objUser.nombre=cursor.get("NombreUsuario");
               objUser.id=cursor.get("IdentidadUsuario");
-              objUser.rol=("Administrador");
+              objUser.rol= cursor.get("Rol");
+              objUser.estado=cursor.get("Estado");
               n=nombre.text;
 
               if(cursor.get("Rol")=="Invitado"){
@@ -130,9 +135,23 @@ class HomeStart extends State<Home>{
 
 
                   },
+
                   child: Text('Registrar'),
                 ),
-              )
+              ),
+              Padding(padding: EdgeInsets.only(top:20, left: 30, right: 30),
+              child: ElevatedButton(
+                style: ElevatedButton.styleFrom(
+                  minimumSize: Size(50,50),
+                  backgroundColor:Colors.black45,
+                ),
+                onPressed: () async {
+                  if(await biometrico())
+                  mensaje("Huella","Huella encontrada");
+                },
+                  child: Icon(Icons.fingerprint, size:80)
+              ),
+              ),
             ],
           ),
         ),
@@ -168,6 +187,54 @@ class HomeStart extends State<Home>{
             ],
           );
         });
+  }
+  Future<bool> biometrico() async {
+    //print("biométrico");
+
+    // bool flag = true;
+    bool authenticated = false;
+
+    const androidString = const AndroidAuthMessages(
+      cancelButton: "Cancelar",
+      goToSettingsButton: "Ajustes",
+      signInTitle: "Ingrese",
+      //fingerprintNotRecognized: 'Error de reconocimiento de huella digital',
+      goToSettingsDescription: "Confirme su huella",
+      //fingerprintSuccess: 'Reconocimiento de huella digital exitoso',
+      biometricHint: "Toque el sensor",
+      //signInTitle: 'Verificación de huellas digitales',
+      biometricNotRecognized: "Huella no reconocida",
+      biometricRequiredTitle: "Required Title",
+      biometricSuccess: "Huella reconocida",
+      //fingerprintRequiredTitle: '¡Ingrese primero la huella digital!',
+    );
+    bool canCheckBiometrics = await auth.canCheckBiometrics;// verifica que el lector boimetrico se puede utilizar
+    // bool isBiometricSupported = await auth.();
+    bool isBiometricSupported = await auth.isDeviceSupported();
+
+    List<BiometricType> availableBiometrics =
+    await auth.getAvailableBiometrics();
+    print(canCheckBiometrics); //Returns trueB
+    // print("support -->" + isBiometricSupported.toString());
+    print(availableBiometrics.toString()); //Returns [BiometricType.fingerprint]
+    try {
+      authenticated = await auth.authenticate(
+          localizedReason: "Autentíquese para acceder",
+          useErrorDialogs: true,
+          stickyAuth: true,
+          //biometricOnly: true,
+          androidAuthStrings: androidString);
+      if (!authenticated) {
+        authenticated = false;
+      }
+    } on PlatformException catch (e) {
+      print(e);
+    }
+    /* if (!mounted) {
+        return;
+      }*/
+
+    return authenticated;
   }
 }
 //Apartado para la creacion de las clases invitado y Admin
