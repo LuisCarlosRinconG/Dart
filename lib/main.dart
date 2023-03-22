@@ -28,6 +28,7 @@ class HomeStart extends State<Home>{
   TextEditingController nombre = TextEditingController();
   TextEditingController contrasena = TextEditingController();
   User objUser=User();
+  int IyA=0;
 
   validarDatos() async{
     try{
@@ -42,11 +43,19 @@ class HomeStart extends State<Home>{
             if(cursor.get("ContraseñaUsuario") == contrasena.text){
               print("ACCESO PERMITIDO!");
               print("BIENVENIDO " + nombre.text);
-              mensaje("Emergente","Acceso permitido");
               objUser.nombre=cursor.get("NombreUsuario");
               objUser.id=cursor.get("IdentidadUsuario");
               objUser.rol=("Administrador");
-              //objUser.estado=
+
+              if(cursor.get("Rol")=="Invitado"){
+                mensaje("Invitado","Bienvenido usuario invitado");
+                IyA=1;
+
+              }else if(cursor.get("Rol")=="Admin"){
+                mensaje("Admin","Bienvenido usuario administrador");
+                IyA=2;
+              }
+
             }else{
               print("La contraseña es incorrecta");
             }
@@ -116,6 +125,8 @@ class HomeStart extends State<Home>{
                 child: TextButton(
                   onPressed: (){
                     Navigator.push(context, MaterialPageRoute(builder: (_) => Registro(objUser)));
+
+
                   },
                   child: Text('Registrar'),
                 ),
@@ -135,7 +146,19 @@ class HomeStart extends State<Home>{
             content: Text(contenido),
             actions: <Widget>[
               FloatingActionButton(
+
                 onPressed: () {
+                if(IyA==1){
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(builder: (context) => invitado()),
+                  );
+                }else if(IyA==2){
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(builder: (context) => admin()),
+                  );
+                }
 
                 },
                 child: Text('Aceptar'),
@@ -143,5 +166,43 @@ class HomeStart extends State<Home>{
             ],
           );
         });
+  }
+}
+//Apartado para la creacion de las clases invitado y Admin
+class invitado extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: Text("Invitado"),
+      ),
+      body: Center(
+        child: FloatingActionButton(
+          onPressed: () {
+            Navigator.pop(context);
+          },
+          child: Text('Go back!'),
+        ),
+      ),
+    );
+  }
+}
+
+class admin extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: Text("Administrador"),
+      ),
+      body: Center(
+        child: FloatingActionButton(
+          onPressed: () {
+            Navigator.pop(context);
+          },
+          child: Text('Hasta pronto'),
+        ),
+      ),
+    );
   }
 }

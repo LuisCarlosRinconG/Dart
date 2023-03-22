@@ -39,7 +39,7 @@ class RegistroApp extends State<Registro>{
         "Estado" : true
       });
       print("Envio correcto");
-      mensaje("Emergente","Registro correcto")
+      mensaje("Emergente","Registro correcto");
     }catch(e){
       print("Error en insert " + e.toString());
     }
