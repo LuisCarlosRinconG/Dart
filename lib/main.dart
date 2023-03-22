@@ -29,6 +29,7 @@ class HomeStart extends State<Home>{
   TextEditingController contrasena = TextEditingController();
   User objUser=User();
   int IyA=0;
+  String n="";
 
   validarDatos() async{
     try{
@@ -46,13 +47,14 @@ class HomeStart extends State<Home>{
               objUser.nombre=cursor.get("NombreUsuario");
               objUser.id=cursor.get("IdentidadUsuario");
               objUser.rol=("Administrador");
+              n=nombre.text;
 
               if(cursor.get("Rol")=="Invitado"){
-                mensaje("Invitado","Bienvenido usuario invitado");
+                mensaje("Invitado","Bienvenido usuario invitado: "+n);
                 IyA=1;
 
               }else if(cursor.get("Rol")=="Admin"){
-                mensaje("Admin","Bienvenido usuario administrador");
+                mensaje("Admin","Bienvenido usuario administrador: "+n);
                 IyA=2;
               }
 
@@ -174,14 +176,16 @@ class invitado extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text("Invitado"),
+        title: Text('Invitado'),
+        backgroundColor: Colors.amberAccent,
+
       ),
       body: Center(
         child: FloatingActionButton(
           onPressed: () {
             Navigator.pop(context);
           },
-          child: Text('Go back!'),
+          child: Text('Hasta pronto'),
         ),
       ),
     );
@@ -193,7 +197,8 @@ class admin extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text("Administrador"),
+        title: Text('Administrador'),
+        backgroundColor: Colors.deepPurple,
       ),
       body: Center(
         child: FloatingActionButton(
